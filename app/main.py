@@ -93,13 +93,19 @@ class Dictionary:
         while capacity_try != 0:
             if self.hash_table[index] is None:
                 raise KeyError(key)
-            elif self.hash_table[index][0] == key:
+
+            if self.hash_table[index] is _DELETED:
+                index = (index + 1) % capacity
+                capacity_try -= 1
+                continue
+
+            if self.hash_table[index][0] == key:
                 self.hash_table[index] = _DELETED
                 self.length -= 1
                 return
-            else:
-                index = (index + 1) % capacity
-                capacity_try -= 1
+
+            index = (index + 1) % capacity
+            capacity_try -= 1
         raise KeyError(key)
 
     def get(self, key: Any, default: Any = None) -> Any:
